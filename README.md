@@ -1,6 +1,7 @@
 # trykle
 Water management controler
 
+Create a local conf.h based off of conf-example.h
 
 # References
 

@@ -1,8 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include ".\conf.h"
 
-const char* ssid = "<changeme>";
-const char* password = "<changeme>";
 uint8_t LED_PIN = D5;
 
 WiFiServer server(80);

@@ -46,14 +46,12 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   // Switch on the LED if an 1 was received as first character
   if ((char)payload[0] == '1') {
-    digitalWrite(BUILTIN_LED, LOW);
-    digitalWrite(LED_PIN, HIGH);
+     turnLightOn();
     // Turn the LED on (Note that LOW is the voltage level
     // but actually the LED is on; this is because
     // it is active low on the ESP-01)
   } else {
-    digitalWrite(BUILTIN_LED, HIGH);
-    digitalWrite(LED_PIN, LOW);
+      turnLightOff();
       // Turn the LED off by making the voltage HIGH
   }
 
@@ -89,8 +87,7 @@ void setup() {
   // Ensure light is turned off
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
-  digitalWrite(LED_PIN, LOW);
+  turnLightOff();
 
   setup_wifi();
   
@@ -147,6 +144,11 @@ void loop() {
     // digitalWrite(LED_PIN, LOW);
     turnLightOff();
     value = LOW;
+    msg = "Low";
+  }
+  else if (request.indexOf("/BLINK") != -1)  {
+    blinkLight(10,500);
+   value = LOW;
     msg = "Low";
   }
   else {

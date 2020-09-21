@@ -12,27 +12,22 @@ uint8_t LED_PIN = D5;
 // else{
 //   msg = "Unknown";
 // }
+void turnLightOn(){
+ digitalWrite(LED_BUILTIN, LOW);
+ digitalWrite(LED_PIN, HIGH);
 
-
-
-// void blinkLight(int amt, int delay){
-//  for(int i = 0; i < amt; i++;){
-//   turn_light_on();
-//   delay(delay);
-//   turn_light_off();
-//   delay(delay);
-//  }
-
-// }
-
+}
 void turnLightOff(){
  digitalWrite(LED_BUILTIN, HIGH);
  digitalWrite(LED_PIN, LOW);
 
 }
 
-void turnLightOn(){
- digitalWrite(LED_BUILTIN, LOW);
- digitalWrite(LED_PIN, HIGH);
-
+void blinkLight(int amt, int wait){
+ for(int i = 0; i < amt; i++){
+  turnLightOn();
+  delay(wait);
+  turnLightOff();
+  delay(wait);
+ }
 }

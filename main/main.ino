@@ -44,15 +44,24 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  // Switch on the LED if an 1 was received as first character
+  // Check first character of payload
   if ((char)payload[0] == '1') {
      turnLightOn();
-    // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is active low on the ESP-01)
-  } else {
+  }
+  else if ((char)payload[0] == '2') {
       turnLightOff();
-      // Turn the LED off by making the voltage HIGH
+  }
+  else if ((char)payload[0] == '3') {
+      blinkLight(5,1*1000);
+  }
+  else if ((char)payload[0] == '4') {
+      blinkLight(5,5*1000);
+  }
+  else if ((char)payload[0] == '5') {
+      blinkLight(5,10*1000);
+  }
+  else {
+    Serial.print("Unknown MQTT value");
   }
 
 }
@@ -146,9 +155,19 @@ void loop() {
     value = LOW;
     msg = "Low";
   }
-  else if (request.indexOf("/BLINK") != -1)  {
-    blinkLight(10,500);
-   value = LOW;
+  else if (request.indexOf("/BLINK=10") != -1)  {
+    blinkLight(5,10*1000);
+    value = LOW;
+    msg = "Low";
+  }
+  else if (request.indexOf("/BLINK=5") != -1)  {
+    blinkLight(5,5*1000);
+    value = LOW;
+    msg = "Low";
+  }
+  else if (request.indexOf("/BLINK=1") != -1)  {
+    blinkLight(5,1*1000);
+    value = LOW;
     msg = "Low";
   }
   else {
@@ -170,8 +189,11 @@ void loop() {
 //    client.print("Off");
 ////  }
   client.println("<br><br>");
-  client.println("<a href=\"/LED=ON\"\"><button>Turn On </button></a>");
-  client.println("<a href=\"/LED=OFF\"\"><button>Turn Off </button></a><br />");  
+  client.println("<a href=\"/LED=ON\"\"><button>Turn On</button></a>");
+  client.println("<a href=\"/LED=OFF\"\"><button>Turn Off</button></a><br />");
+  client.println("<a href=\"/BLINK=1\"\"><button>Blink 1 Sec</button></a><br />"); 
+  client.println("<a href=\"/BLINK=5\"\"><button>Blink 5 Sec</button></a><br />"); 
+  client.println("<a href=\"/BLINK=10\"\"><button>Blink 10 Sec</button></a><br />");  
   client.println("</html>");
 
   delay(1);

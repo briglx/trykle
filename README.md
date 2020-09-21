@@ -15,9 +15,10 @@ Installed v2.8
 
 Create a user and ACL for the user
 
-| Type | Pattern | Read Write |
-|---|---|---|---|---|
-| Topic  | user - #  | true /true   |
+ Type | Pattern | Read Write 
+ -----|---------|------------
+ Topic  | user - #  | true /true 
+
 
 # References
 

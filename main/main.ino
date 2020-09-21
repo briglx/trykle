@@ -1,8 +1,9 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include ".\conf.h"
+#include ".\function.h"
 
-uint8_t LED_PIN = D5;
+//uint8_t LED_PIN = D5;
 
 WiFiServer server(80);
 
@@ -135,14 +136,16 @@ void loop() {
   int value = LOW;
   char* msg;
   if (request.indexOf("/LED=ON") != -1)  {
-    digitalWrite(LED_BUILTIN, LOW);
-    digitalWrite(LED_PIN, HIGH);
+    // digitalWrite(LED_BUILTIN, LOW);
+    // digitalWrite(LED_PIN, HIGH);
+    turnLightOn();
     value = HIGH;
     msg = "High";
   }
   else if (request.indexOf("/LED=OFF") != -1)  {
-    digitalWrite(LED_BUILTIN, HIGH);
-    digitalWrite(LED_PIN, LOW);
+    // digitalWrite(LED_BUILTIN, HIGH);
+    // digitalWrite(LED_PIN, LOW);
+    turnLightOff();
     value = LOW;
     msg = "Low";
   }

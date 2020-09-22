@@ -2,13 +2,13 @@
 #include <PubSubClient.h>
 #include ".\conf.h"
 #include ".\function.h"
-
+using namespace std;
 //uint8_t LED_PIN = D5;
 
 WiFiServer server(80);
 
-WiFiClient espClient;
-PubSubClient client(espClient);
+
+
 int value = 0;
 
 void setup_wifi() {

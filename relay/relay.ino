@@ -1,10 +1,10 @@
 #include ".\conf.h"
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+using namespace std;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-WiFiServer server(80);
 
 uint8_t DATA_PIN = D1;
 uint8_t CLOCK_PIN = D2;
@@ -35,6 +35,7 @@ void setup_wifi() {
 }
 
 void reconnect() {
+
   // Loop until we're reconnected
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
@@ -59,6 +60,7 @@ void reconnect() {
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
+
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
@@ -67,32 +69,29 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-    if ((char)payload[0] == '1') {
-      digitalWrite(LATCH_PIN, LOW);
-      shiftOut(DATA_PIN,CLOCK_PIN,LSBFIRST,payload[0]);
-      digitalWrite(LATCH_PIN,HIGH);
+  payload[length] = '\0'; // Make payload a string by NULL terminating it.
+  int pwmVal = atoi((char *)payload);
 
+  digitalWrite(LATCH_PIN, LOW);
+  shiftOut(DATA_PIN, CLOCK_PIN, LSBFIRST, pwmVal);
+  digitalWrite(LATCH_PIN,HIGH);
 
-      // delay(1000);
-      // digitalWrite(LATCH_PIN,LOW);
-      // shiftOut(DATA_PIN,CLOCK_PIN,LSBFIRST,0);
-      // digitalWrite(LATCH_PIN, HIGH);
-      // delay(1000);
-  }
 }
 
 void setup() {
+
   Serial.begin(115200);
   pinMode(DATA_PIN, OUTPUT);
   pinMode(CLOCK_PIN, OUTPUT);
   pinMode(LATCH_PIN, OUTPUT);
+
+  digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(CLOCK_PIN, LOW);
+  digitalWrite(LATCH_PIN, LOW);
+
   setup_wifi();
-  
-  // Start the server
-  server.begin();
-  Serial.println("Server started");
  
- //start MQTT client
+  //start MQTT client
   client.setServer(mqtt_server, mqttPort);
   client.setCallback(callback);
   
@@ -105,9 +104,4 @@ void loop() {
   }
   client.loop();
 
-  // Check if a client has connected
-  WiFiClient client = server.available();
-  if (!client) {
-    return;
-  }
 }

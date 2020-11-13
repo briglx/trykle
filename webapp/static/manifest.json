@@ -1,0 +1,23 @@
+{
+    "short_name": "Trykle",
+    "name": "Trykle Irrigation Controller.",
+    "description": "Manage the Trykle irrigation controller.",
+    "version": "0.0.1",
+    "manifest_version": 1,
+    "icons": [
+      {
+        "src": "/static/img/ico/favicon-192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/static/img/ico/favicon-512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#ffffff"
+  }

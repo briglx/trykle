@@ -73,7 +73,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   int pwmVal = atoi((char *)payload);
 
   digitalWrite(LATCH_PIN, LOW);
-  shiftOut(DATA_PIN, CLOCK_PIN, LSBFIRST, pwmVal);
+  shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, pwmVal);
   digitalWrite(LATCH_PIN,HIGH);
 
 }

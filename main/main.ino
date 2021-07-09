@@ -1,13 +1,17 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+
 #include ".\conf.h"
 #include ".\function.h"
+#include "I2CRTC.h"
+
 using namespace std;
 //uint8_t LED_PIN = D5;
 
 WiFiServer server(80);
 
 
+#define RTC_SYNC_INTERVAL				3607
 
 int value = 0;
 
@@ -107,6 +111,16 @@ void setup() {
  //start MQTT client
   client.setServer(mqtt_server, mqttPort);
   client.setCallback(callback);
+
+
+  // // Set RTC as the time source
+  // setSyncInterval(RTC_SYNC_INTERVAL);
+  // setSyncProvider(getRtcTime);
+
+  Serial.println("Getting Time");
+  time_t cur_time;
+  cur_time = RTC.get();
+  Serial.println(cur_time);
   
 }
 

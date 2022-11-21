@@ -101,6 +101,59 @@ To read, it looks like you have to write the device address and the regsiter add
 
 The data is coded in binary-coded decimal (BCD)
 
+# MCP23008-e/p PDIP/SOIC
+
+- SCL/SCK Pin 1
+- SDA/SI Pin 2
+- A2/SO (Hardware address pin) Pin 3
+- A1 (Hardware address pin) Pin 4
+- A0 (Hardware address pin) Pin 5
+- (-)Reset Pin 6 (Need to Keep high)
+- VSS (Ground) Pin 9
+- GP0 Pin 10
+- GP1 Pin 11
+- GP2 Pin 12
+- GP3 Pin 13
+- GP4 Pin 14
+- GP5 Pin 15
+- GP6 Pin 16
+- GP7 Pin 17
+- VDD (Power) Pin 18
+
+Device Address
+Based on teh A0-1 pins
+
+A0 | A1 | A2 | Decimal | Address
+--------------------------------
+0  |  0 | 0  | 0       | 0x20
+0  |  0 | 1  | 1       | 0x21
+0  |  1 | 0  | 2       | 0x22
+0  |  1 | 1  | 3       | 0x23
+1  |  0 | 0  | 4       | 0x24
+1  |  0 | 1  | 5       | 0x25
+1  |  1 | 0  | 6       | 0x26
+1  |  1 | 1  | 7       | 0x27
+
+
+Register Address
+
+ Address | Access to
+---------|---------- 
+00h | IODIR
+01h | IPOL
+02h | GPINTEN
+03h | DEFVAL
+04h | INTCON
+05h | IOCON
+06h | GPPU
+07h | INTF
+08h | INTCAP (Read-only)
+09h | GPIO
+0Ah | OLA
+
+
+Opensprinkler code:
+
 
 # References
 
@@ -113,3 +166,6 @@ The data is coded in binary-coded decimal (BCD)
 - Arduino Strings https://majenko.co.uk/blog/evils-arduino-strings
 - Arduino Time library docs https://github.com/PaulStoffregen/Time
 - C++ Style Guide https://google.github.io/styleguide/cppguide.html
+- MCP23008-e/p https://4donline.ihs.com/images/VipMasterIC/IC/MCHP/MCHP-S-A0008004111/MCHP-S-A0008004111-1.pdf?hkey=52A5661711E402568146F3353EA87419
+- MCP23008 video demo https://www.youtube.com/watch?v=Sos2ghv80wU
+- Adafruit MCP230xx library https://github.com/adafruit/Adafruit-MCP23017-Arduino-Library

@@ -1,11 +1,15 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
+
+
+
 #include <WiFiUdp.h>
 
 #include ".\conf.h"
 #include ".\function.h"
 #include "I2CRTC.h"
+#include "Adafruit_MCP23X08.h"
 
 using namespace std;
 //uint8_t LED_PIN = D5;
@@ -21,6 +25,9 @@ static const char ntpServerName[] = "us.pool.ntp.org";
 const int timeZone = -7;
 WiFiUDP Udp;
 unsigned int localPort = 8888;  // local port to listen for UDP packets
+
+// #define LED_PIN 0     // MCP23XXX pin LED is attached to
+Adafruit_MCP23X08 mcp;
 
 void setup_wifi() {
 
@@ -44,6 +51,7 @@ void setup_wifi() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -174,7 +182,7 @@ void setup() {
   
   // Ensure light is turned off
   pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(LED_PIN, OUTPUT);
+  // pinMode(LED_PIN, OUTPUT);
   turnLightOff();
 
   setup_wifi();
@@ -189,19 +197,40 @@ void setup() {
   server.begin();
   Serial.println("Server started");
  
- //start MQTT client
+  //start MQTT client
   client.setServer(mqtt_server, mqttPort);
   client.setCallback(callback);
 
-  // // Set RTC as the time source
+  // On startup sync time with ntp
+  performNtpSync();
+  
+  // Set RTC as the time source
   setSyncInterval(RTC_SYNC_INTERVAL);
   setSyncProvider(RTC.get);
 
+  Serial.print("System start time: ");
+  Serial.println(now());
+
+  // Setup IO Expander
+  Serial.println("Setting up IO Expander");
   
+  if (!mcp.begin_I2C()) {
+    Serial.println("Error.");
+    while (1);
+  }
+  mcp.pinMode(0, OUTPUT);
+  mcp.pinMode(1, OUTPUT);
+  mcp.pinMode(2, OUTPUT);
+  mcp.pinMode(3, OUTPUT);
+  mcp.pinMode(4, OUTPUT);
+  mcp.pinMode(5, OUTPUT);
+  mcp.pinMode(6, OUTPUT);
+  mcp.pinMode(7, OUTPUT);
+  // mcp.pinMode(0, OUTPUT);
+
+ 
 }
-
-
-
+int cur_led = 0;
 
 void loop() {
 
@@ -217,9 +246,21 @@ void loop() {
     performNtpSync();
   }
 
-  Serial.println(now());
-  
-  delay(20000);
+  if (curr_time % 180 == 0){
+    Serial.println(now());
+    delay(1000);
+  }
+
+  mcp.digitalWrite(cur_led, HIGH);
+  delay(500);
+  mcp.digitalWrite(cur_led, LOW);
+  delay(500);
+
+  cur_led = cur_led + 1;
+  if (cur_led > 7) {
+    cur_led = 0;
+  }
+
 
 //   // Check if a client has connected
 //   WiFiClient client = server.available();
